@@ -153,4 +153,4 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /var/regex
 
-CMD ["/usr/bin/php", "/var/regex/run-benchmarks.php"]
+CMD ["python", "/var/regex/run-benchmarks.py"]
