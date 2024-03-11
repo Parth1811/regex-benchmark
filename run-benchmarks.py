@@ -1,4 +1,5 @@
 import subprocess
+import json
 
 PATTERNS_COUNT = 3
 RUN_TIMES = 10
@@ -48,43 +49,53 @@ COMMANDS = {
     'Rust': 'rust/target/release/benchmark',
 }
 
-print('- Build')
+TEST_DATA = json.load(open('test.json', 'r'))
 
+
+print("-------------------------------------------")
+print("Building compilable files for testing .....")
 for language, build_cmd in BUILDS.items():
     subprocess.run(build_cmd, shell=True)
     print(f'{language} built.')
 
-print('\n- Run')
 
+print("------------------------")
+print("Running benchmarks .....")
 results = {}
 
-for language, command in COMMANDS.items():
-    print(f'{language} running.', end=' ')
+for data in TEST_DATA:
+    print("------------------------------------------")
+    print(f'Running benchmarks for {data["name"]} ...')
+    for language in data['engines']:
+        command = COMMANDS[language]
+        print(f'{language} running.', end=' ')
 
-    current_results = [[] for _ in range(PATTERNS_COUNT)]
+        current_results = [[] for _ in range(PATTERNS_COUNT)]
 
-    for i in range(RUN_TIMES):
-        out = subprocess.run(f'{command} input-text.txt', shell=True, capture_output=True, text=True).stdout
-        matches = [float(match) for match in out.splitlines() if match.strip()]
+        for input_text in data['texts']:
+            for i in range(RUN_TIMES):
+                out = subprocess.run(f'{command} {input_text}', shell=True, capture_output=True, text=True).stdout
+                matches = [float(match) for match in out.splitlines() if match.strip()]
 
-        if not matches:
-            break
+                if not matches:
+                    break
 
-        for j in range(PATTERNS_COUNT):
-            current_results[j].append(matches[j])
+                for j in range(PATTERNS_COUNT):
+                    current_results[j].append(matches[j])
 
-        print('.', end='', flush=True)
+                print('.', end='', flush=True)
 
-    if current_results:
-        avg_times = [sum(times) / len(times) for times in current_results]
-        results[language] = avg_times + [sum(avg_times)]
+            if current_results:
+                avg_times = [sum(times) / len(times) for times in current_results]
+                results[language] = avg_times + [sum(avg_times)]
 
-    print(f' {language} ran.')
+            print(f' {language} ran.')
 
-print('\n- Results')
+    print("------------------------")
+    print("Benchmark results .....")
 
-results = dict(sorted(results.items(), key=lambda item: item[1][-1]))
+    results = dict(sorted(results.items(), key=lambda item: item[1][-1]))
 
-for language, result in results.items():
-    result_formatted = [f'{time:.2f}' for time in result]
-    print(f'**{language}** | {" | ".join(result_formatted)}')
+    for language, result in results.items():
+        result_formatted = [f'{time:.2f}' for time in result]
+        print(f'**{language}** | {" | ".join(result_formatted)}')
