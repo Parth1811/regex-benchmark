@@ -43,12 +43,12 @@ RUN apt-get install -yq --no-install-recommends \
     unzip srell.zip -d /tmp/srell && \
     cp -p -u /tmp/srell/single-header/srell.hpp /usr/local/include
 
-## C# Mono
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF && \
-    echo "deb https://download.mono-project.com/repo/ubuntu stable-bionic main" | tee /etc/apt/sources.list.d/mono-official-stable.list && \
-    apt-get update && \
-    apt-get install -yq --no-install-recommends \
-        mono-devel
+# ## C# Mono
+# RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF && \
+#     echo "deb https://download.mono-project.com/repo/ubuntu stable-bionic main" | tee /etc/apt/sources.list.d/mono-official-stable.list && \
+#     apt-get update && \
+#     apt-get install -yq --no-install-recommends \
+#         mono-devel
 
 ## C# .Net Core
 RUN wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
@@ -107,12 +107,12 @@ RUN curl https://nim-lang.org/choosenim/init.sh -sSf | sh -s -- -y && \
     ln -s /root/.nimble/bin/nim /usr/local/bin/nim && \
     /root/.nimble/bin/nimble install regex -y
 
-## PHP
-RUN add-apt-repository ppa:ondrej/php --yes && \
-        apt-get update && \
-        apt-get install -yq --no-install-recommends \
-            libpcre2-dev \
-            php8.0-cli
+# ## PHP
+# RUN add-apt-repository ppa:ondrej/php --yes && \
+#         apt-get update && \
+#         apt-get install -yq --no-install-recommends \
+#             libpcre2-dev \
+#             php8.0-cli
 
 ## Python 2
 RUN apt-get install -yq --no-install-recommends \
