@@ -15,8 +15,12 @@
             "C++ Boost",
             "C++ SRELL",
             "Java",
+            "Perl",
             "Python 2",
             "Python 3",
+            "Python PyPy2",
+            "Python PyPy3",
+            "Ruby",
             "Rust"
         ]
     }

@@ -1,20 +1,24 @@
 <?php
 
-if (count($argv) !== 2) {
-    echo 'Usage: php benchmark.php <filename>';
+if (count($argv) == 2) {
+    echo 'Usage: php benchmark.php <filename> regex1 regex2 regex3 ...';
     die(1);
 }
 
 $data  = file_get_contents($argv[1]);
 
-// Email
-measure($data, '/[\w\.+-]+@[\w\.-]+\.[\w\.-]+/');
+for ($i = 2; $i < count($argv); $i++) {
+    measure($data, $argv[$i]);
+}
 
-// URI
-measure($data, '/[\w]+:\/\/[^\/\s?#]+[^\s?#]+(?:\?[^\s#]*)?(?:#[^\s]*)?/');
+// // Email
+// measure($data, '/[\w\.+-]+@[\w\.-]+\.[\w\.-]+/');
 
-// IP
-measure($data, '/(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])/');
+// // URI
+// measure($data, '/[\w]+:\/\/[^\/\s?#]+[^\s?#]+(?:\?[^\s#]*)?(?:#[^\s]*)?/');
+
+// // IP
+// measure($data, '/(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])/');
 
 function measure($data, $pattern) {
     $startTime = microtime(true);

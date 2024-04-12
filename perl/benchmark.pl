@@ -12,8 +12,8 @@ sub measure {
     printf("%f - %d\n", $elapsed, $count);
 }
 
-if (@ARGV != 1) {
-  die "Usage: ./benchmark.pl <filename>\n";
+if (@ARGV <= 1) {
+  die "Usage: ./benchmark.pl <filename> regex1 regex2 ...\n";
 }
 
 my ($filename) = @ARGV;
@@ -23,14 +23,18 @@ my $text;
 read $fh, $data, -s $filename;
 close $fh;
 
-# Email
-measure $data, '[\w\.+-]+@[\w\.-]+\.[\w\.-]+';
+for (my $i = 1; $i < @ARGV; $i++) {
+  measure($data, $ARGV[$i]);
+}
 
-# URI
-measure $data, '[\w]+:\/\/[^\/\s?#]+[^\s?#]+(?:\?[^\s#]*)?(?:#[^\s]*)?';
+# # Email
+# measure $data, '[\w\.+-]+@[\w\.-]+\.[\w\.-]+';
 
-# IP
-measure $data, '(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])';
+# # URI
+# measure $data, '[\w]+:\/\/[^\/\s?#]+[^\s?#]+(?:\?[^\s#]*)?(?:#[^\s]*)?';
+
+# # IP
+# measure $data, '(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])';
 
 
 

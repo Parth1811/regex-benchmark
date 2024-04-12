@@ -79,8 +79,10 @@ for data in TEST_DATA:
             for i in range(RUN_TIMES):
                 test_regexes = '" "'.join(data['test_regexes'])
                 # print(f'{command} {input_text} "{test_regexes}"')
-                out = subprocess.run(f'{command} {input_text} "{test_regexes}"', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout
-                # print("out: ", out)
+                subproc = subprocess.run(f'{command} {input_text} "{test_regexes}"', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                out, err = subproc.stdout, subproc.stderr
+                print("out: ", out)
+                print("err: ", err)
                 matches = [float(match.split(b'-')[0].strip()) for match in out.splitlines() if match.strip()]
 
                 if not matches:

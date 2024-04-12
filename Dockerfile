@@ -108,10 +108,10 @@ RUN curl https://nim-lang.org/choosenim/init.sh -sSf | sh -s -- -y && \
     /root/.nimble/bin/nimble install regex -y
 
 # ## PHP
-# RUN add-apt-repository ppa:ondrej/php --yes && \
-#         apt-get update && \
-#         apt-get install -yq --no-install-recommends \
-#             libpcre2-dev \
+RUN add-apt-repository ppa:ondrej/php --yes && \
+        apt-get update && \
+        apt-get install -yq --no-install-recommends \
+            libpcre2-dev
 #             php8.0-cli
 
 ## Python 2
