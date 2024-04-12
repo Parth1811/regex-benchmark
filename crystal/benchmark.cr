@@ -16,9 +16,8 @@ end
 
 data = File.read(ARGV[0])
 
-for i in 1..ARGV.size-1
-  pattern = Regexp.new(ARGV[i])
-  measure(data, pattern)
+(1...ARGV.size).each do |i|
+  measure(data, ARGV[i])
 end
 
 # # Email
