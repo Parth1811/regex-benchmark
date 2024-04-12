@@ -1,5 +1,6 @@
 import sys
 import re
+import json
 from timeit import default_timer as timer
 
 if len(sys.argv) != 2:
@@ -18,12 +19,8 @@ def measure(data, pattern):
 
 with open(sys.argv[1]) as file:
     data = file.read()
+    test_regexes = json.loads(sys.argv[2])
 
-    # Email
-    measure(data, '[\w\.+-]+@[\w\.-]+\.[\w\.-]+')
+    for regex in test_regexes:
+        measure(data, regex)
 
-    # URI
-    measure(data, '[\w]+://[^/\s?#]+[^\s?#]+(?:\?[^\s#]*)?(?:#[^\s]*)?')
-
-    # IP
-    measure(data, '(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])')

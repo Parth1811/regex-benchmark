@@ -49,7 +49,7 @@ COMMANDS = {
     'Rust': 'rust/target/release/benchmark',
 }
 
-TEST_DATA = json.load(open('test.json', 'r'))
+TEST_DATA = json.load(open('test_for_custom_regex.json', 'r'))
 
 
 print("-------------------------------------------")
@@ -74,7 +74,8 @@ for data in TEST_DATA:
 
         for input_text in data['texts']:
             for i in range(RUN_TIMES):
-                out = subprocess.run(f'{command} {input_text}', shell=True, capture_output=True, text=True).stdout
+                test_regexes = json.dumps(data['test_regexes'])
+                out = subprocess.run(f'{command} {input_text} {test_regexes}', shell=True, capture_output=True, text=True).stdout
                 matches = [float(match) for match in out.splitlines() if match.strip()]
 
                 if not matches:

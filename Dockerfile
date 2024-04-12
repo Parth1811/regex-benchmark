@@ -1,4 +1,4 @@
-FROM ubuntu:bionic
+FROM --platform=linux/amd64 ubuntu:bionic
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -27,7 +27,7 @@ ENV LC_ALL en_US.UTF-8
 
 ## C
 # PCRE is installed with PHP 8
-#RUN apt-get install -yq --no-install-recommends \
+# RUN apt-get install -yq --no-install-recommends \
 #        libpcre2-dev
 
 ## Crystal
