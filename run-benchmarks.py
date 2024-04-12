@@ -54,9 +54,10 @@ TEST_DATA = json.load(open('test_for_custom_regex.json', 'r'))
 
 print("-------------------------------------------")
 print("Building compilable files for testing .....")
-for language, build_cmd in BUILDS.items():
-    subprocess.run(build_cmd, shell=True)
-    print(f'{language} built.')
+optimized_builds = set(BUILDS.keys()).intersection
+# for language, build_cmd in BUILDS.items():
+#     subprocess.run(build_cmd, shell=True)
+#     print(f'{language} built.')
 
 
 print("------------------------")
@@ -72,11 +73,13 @@ for data in TEST_DATA:
 
         current_results = [[] for _ in range(PATTERNS_COUNT)]
 
-        for input_text in data['texts']:
+        for input_text in data['test_string_files']:
             for i in range(RUN_TIMES):
                 test_regexes = json.dumps(data['test_regexes'])
-                out = subprocess.run(f'{command} {input_text} {test_regexes}', shell=True, capture_output=True, text=True).stdout
-                matches = [float(match) for match in out.splitlines() if match.strip()]
+                # print(f'{command} {input_text} "{test_regexes}"')
+                out = subprocess.run(f'{command} {input_text} {test_regexes}', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout
+                # print("out: ", out)
+                matches = [float(match.split(b'-')[0].strip()) for match in out.splitlines() if match.strip()]
 
                 if not matches:
                     break
