@@ -26,8 +26,8 @@ func measure(data string, pattern string) {
 }
 
 func main() {
-    if len(os.Args) != 2 {
-        fmt.Println("Usage: benchmark <filename>")
+    if len(os.Args) <= 2 {
+        fmt.Println("Usage: benchmark <filename> regex1 regex2 ... regexN")
         os.Exit(1)
     }
 
@@ -41,12 +41,17 @@ func main() {
     buf.ReadFrom(filerc)
     data := buf.String()
 
-    // Email
-    measure(data, `[\w\.+-]+@[\w\.-]+\.[\w\.-]+`)
 
-    // URI
-    measure(data, `[\w]+://[^/\s?#]+[^\s?#]+(?:\?[^\s#]*)?(?:#[^\s]*)?`)
+    for i := 2; i < len(os.Args); i++ {
+        measure(data, os.Args[i])
+    }
 
-    // IP
-    measure(data, `(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])`)
+    // // Email
+    // measure(data, `[\w\.+-]+@[\w\.-]+\.[\w\.-]+`)
+
+    // // URI
+    // measure(data, `[\w]+://[^/\s?#]+[^\s?#]+(?:\?[^\s#]*)?(?:#[^\s]*)?`)
+
+    // // IP
+    // measure(data, `(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])`)
 }

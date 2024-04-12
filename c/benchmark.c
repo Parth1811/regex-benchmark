@@ -25,8 +25,8 @@ char *read_file(char *filename)
   size_t result = fread(data, length, 1, fh);
   if (result != 1)
   {
-	fputs("err", stderr);
-	exit(1);
+    fputs("err", stderr);
+    exit(1);
   }
   fclose(fh);
 
@@ -48,11 +48,11 @@ void measure(char *data, char *pattern)
 
   clock_gettime(CLOCK_MONOTONIC, &start);
 
-  re = pcre2_compile((PCRE2_SPTR) pattern, PCRE2_ZERO_TERMINATED, 0, &errorcode, &erroroffset, NULL);
+  re = pcre2_compile((PCRE2_SPTR)pattern, PCRE2_ZERO_TERMINATED, 0, &errorcode, &erroroffset, NULL);
   match_data = pcre2_match_data_create_from_pattern(re, NULL);
   length = strlen(data);
 
-  while (pcre2_match(re, (PCRE2_SPTR8) data, length, offset, 0, match_data, NULL) == 1)
+  while (pcre2_match(re, (PCRE2_SPTR8)data, length, offset, 0, match_data, NULL) == 1)
   {
     count++;
 
@@ -71,22 +71,27 @@ void measure(char *data, char *pattern)
 
 int main(int argc, char **argv)
 {
-  if (argc != 2)
+  if (argc <= 2)
   {
-    printf("Usage: benchmark  <filename>");
+    printf("Usage: benchmark  <filename> regex1 regex2 ..\n");
     exit(1);
   }
 
   char *data = read_file(argv[1]);
 
-  // Email
-  measure(data, "[\\w\\.+-]+@[\\w\\.-]+\\.[\\w\\.-]+");
+  for (int i = 2; i < argc; i++)
+  {
+    measure(data, argv[i]);
+  }
 
-  // URI
-  measure(data, "[\\w]+://[^/\\s?#]+[^\\s?#]+(?:\\?[^\\s#]*)?(?:#[^\\s]*)?");
+  // // Email
+  // measure(data, "[\\w\\.+-]+@[\\w\\.-]+\\.[\\w\\.-]+");
 
-  // IP
-  measure(data, "(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])");
+  // // URI
+  // measure(data, "[\\w]+://[^/\\s?#]+[^\\s?#]+(?:\\?[^\\s#]*)?(?:#[^\\s]*)?");
+
+  // // IP
+  // measure(data, "(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])");
 
   free(data);
 

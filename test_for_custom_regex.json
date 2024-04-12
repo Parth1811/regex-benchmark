@@ -11,11 +11,14 @@
             "input-text.txt"
         ],
         "engines": [
+            "C PCRE2",
             "Crystal",
             "C++ STL",
             "C++ Boost",
             "C++ SRELL",
             "C# .Net Core",
+            "Dart Native",
+            "Go",
             "Java",
             "Kotlin",
             "Nim",
