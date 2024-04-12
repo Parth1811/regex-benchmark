@@ -1,7 +1,7 @@
 require "benchmark"
 
-if (ARGV.size != 1)
-  puts "Usage: benchmark <filename>"
+if (ARGV.size <= 1)
+  puts "Usage: benchmark <filename> regex1 regex2 ..."
   exit 1
 end
 
@@ -16,11 +16,16 @@ end
 
 data = File.read(ARGV[0])
 
-# Email
-measure(data, /[\w\.+-]+@[\w\.-]+\.[\w\.-]+/)
+for i in 1..ARGV.size-1
+  pattern = Regexp.new(ARGV[i])
+  measure(data, pattern)
+end
 
-# URI
-measure(data, /[\w]+:\/\/[^\/\s?#]+[^\s?#]+(?:\?[^\s#]*)?(?:#[^\s]*)?/)
+# # Email
+# measure(data, /[\w\.+-]+@[\w\.-]+\.[\w\.-]+/)
 
-# IP
-measure(data, /(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])/)
+# # URI
+# measure(data, /[\w]+:\/\/[^\/\s?#]+[^\s?#]+(?:\?[^\s#]*)?(?:#[^\s]*)?/)
+
+# # IP
+# measure(data, /(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])/)

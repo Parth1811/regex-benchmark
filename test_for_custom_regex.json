@@ -11,10 +11,12 @@
             "input-text.txt"
         ],
         "engines": [
+            "Crystal",
             "C++ STL",
             "C++ Boost",
             "C++ SRELL",
             "Java",
+            "Kotlin",
             "Nim",
             "Nim Regex",
             "Perl",
