@@ -1,8 +1,8 @@
 import subprocess
 import json
 
-PATTERNS_COUNT = 3
-RUN_TIMES = 10
+
+RUN_TIMES = 1
 
 BUILDS = {
     'C PCRE2': 'gcc -O3 -DNDEBUG c/benchmark.c -I/usr/local/include/ -lpcre2-8 -o c/bin/benchmark',
@@ -54,10 +54,11 @@ TEST_DATA = json.load(open('test_for_custom_regex.json', 'r'))
 
 print("-------------------------------------------")
 print("Building compilable files for testing .....")
-optimized_builds = set(BUILDS.keys()).intersection
-# for language, build_cmd in BUILDS.items():
-#     subprocess.run(build_cmd, shell=True)
-#     print(f'{language} built.')
+list_of_test_languages = set.union(*[set(data['engines']) for data in TEST_DATA])
+for language, build_cmd in BUILDS.items():
+    if language in list_of_test_languages:
+        subprocess.run(build_cmd, shell=True)
+        print(f'{language} built.')
 
 
 print("------------------------")
@@ -71,6 +72,7 @@ for data in TEST_DATA:
         command = COMMANDS[language]
         print(f'{language} running.', end=' ')
 
+        PATTERNS_COUNT = len(data['test_regexes'])
         current_results = [[] for _ in range(PATTERNS_COUNT)]
 
         for input_text in data['test_string_files']:

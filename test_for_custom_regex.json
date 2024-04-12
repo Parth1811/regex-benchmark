@@ -11,6 +11,9 @@
             "input-text.txt"
         ],
         "engines": [
+            "C++ STL",
+            "C++ Boost",
+            "C++ SRELL",
             "Python 2",
             "Python 3"
         ]
