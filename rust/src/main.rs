@@ -15,19 +15,23 @@ fn measure(data: &str, pattern: &str) {
 
 fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     let path = match std::env::args_os().nth(1) {
-        None => return Err(From::from("Usage: benchmark <filename>")),
+        None => return Err(From::from("Usage: benchmark <filename> regex1 regex2 ... regexN")),
         Some(path) => path,
     };
     let data = std::fs::read_to_string(path)?;
 
-    // Email
-    measure(&data, r"[\w\.+-]+@[\w\.-]+\.[\w\.-]+");
+    for arg in std::env::args().skip(2) {
+        measure(&data, &arg);
+    }
 
-    // URI
-    measure(&data, r"[\w]+://[^/\s?#]+[^\s?#]+(?:\?[^\s#]*)?(?:#[^\s]*)?");
+    // // Email
+    // measure(&data, r"[\w\.+-]+@[\w\.-]+\.[\w\.-]+");
 
-    // IP
-    measure(&data, r"(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])");
+    // // URI
+    // measure(&data, r"[\w]+://[^/\s?#]+[^\s?#]+(?:\?[^\s#]*)?(?:#[^\s]*)?");
+
+    // // IP
+    // measure(&data, r"(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])");
 
     Ok(())
 }

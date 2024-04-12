@@ -6,18 +6,24 @@ import java.util.regex.Pattern;
 
 public final class Benchmark {
     public static void main(String... args) throws IOException {
-        if (args.length != 1) {
-            System.out.println("Usage: java Benchmark <filename>");
+        if (args.length <= 1) {
+            System.out.println("Usage: java Benchmark <filename>, regex1, regex2, ...");
             System.exit(1);
         }
 
         final String data = Files.readString(Paths.get(args[0]));
 
-        measure(data, "[\\w.+-]+@[\\w.-]+\\.[\\w.-]+");
-        measure(data, "[\\w]+://[^/\\s?#]+[^\\s?#]+(?:\\?[^\\s#]*)?(?:#[^\\s]*)?");
-        measure(data, "(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])");
+        for (int i = 1; i < args.length; ++i) {
+            // System.out.println("Regex " + i + ": " + args[i]);
+            measure(data, args[i]);
+        }
+
+        // measure(data, "[\\w.+-]+@[\\w.-]+\\.[\\w.-]+");
+        // measure(data, "[\\w]+://[^/\\s?#]+[^\\s?#]+(?:\\?[^\\s#]*)?(?:#[^\\s]*)?");
+        // measure(data, "(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])");
     }
 
+    
     private static void measure(String data, String pattern) {
         long startTime = System.nanoTime();
 

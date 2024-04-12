@@ -14,8 +14,10 @@
             "C++ STL",
             "C++ Boost",
             "C++ SRELL",
+            "Java",
             "Python 2",
-            "Python 3"
+            "Python 3",
+            "Rust"
         ]
     }
 ]

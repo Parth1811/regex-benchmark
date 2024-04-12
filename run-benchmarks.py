@@ -35,7 +35,7 @@ COMMANDS = {
     'D ldc': 'd/bin/benchmark-ldc',
     'Dart Native': 'dart/bin/benchmark',
     'Go': 'go/bin/benchmark',
-    'Java': 'java -XX:+UnlockExperimentalVMOptions -XX:+UseEpsilonGC -classpath java Benchmark',
+    'Java': 'java -XX:+UnlockExperimentalVMOptions -XX:+UseEpsilonGC -XX:+AlwaysPreTouch -Xmx256M -Xms256M -classpath java Benchmark',
     'Kotlin': 'kotlin kotlin/benchmark.jar',
     'Nim': 'nim/bin/benchmark',
     'Nim Regex': 'nim/bin/benchmark_regex',
@@ -77,9 +77,9 @@ for data in TEST_DATA:
 
         for input_text in data['test_string_files']:
             for i in range(RUN_TIMES):
-                test_regexes = json.dumps(data['test_regexes'])
+                test_regexes = '" "'.join(data['test_regexes'])
                 # print(f'{command} {input_text} "{test_regexes}"')
-                out = subprocess.run(f'{command} {input_text} {test_regexes}', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout
+                out = subprocess.run(f'{command} {input_text} "{test_regexes}"', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout
                 # print("out: ", out)
                 matches = [float(match.split(b'-')[0].strip()) for match in out.splitlines() if match.strip()]
 
