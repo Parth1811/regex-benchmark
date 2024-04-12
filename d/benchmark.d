@@ -21,19 +21,23 @@ void measure(string data, string pattern) {
 }
 
 void main(string [] args) {
-    if(args.length != 2) {
-        writeln("Usage: benchmark <filename>");
+    if(args.length <= 2) {
+        writeln("Usage: benchmark <filename> regex1 regex2 ...");
         exit(1);
     }
 
     string data = readText(args[1]);
 
-    // Email
-    measure(data, r"[\w\.+-]+@[\w\\.-]+\.[\w\.-]+");
+    for(int i = 2; i < args.length; i++) {
+        measure(data, args[i]);
+    }
 
-    // URI
-    measure(data, r"[\w]+://[^/\s?#]+[^\s?#]+(?:\?[^\s#]*)?(?:#[^\s]*)?");
+    // // Email
+    // measure(data, r"[\w\.+-]+@[\w\\.-]+\.[\w\.-]+");
 
-    // IP
-    measure(data, r"(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])");
+    // // URI
+    // measure(data, r"[\w]+://[^/\s?#]+[^\s?#]+(?:\?[^\s#]*)?(?:#[^\s]*)?");
+
+    // // IP
+    // measure(data, r"(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9])");
 }
